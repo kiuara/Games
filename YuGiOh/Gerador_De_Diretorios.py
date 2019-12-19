@@ -12,7 +12,7 @@ while(Continuar):
 
 
  for number in file:
-  os.link(number,'/'+diretorio+'/'+number)
+  os.link(number,diretorio+number)
   os.remove(number)
 
  Continuar = int(input("Deseja Continuar? 1 / 0"))
