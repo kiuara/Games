@@ -7,8 +7,11 @@
 #define HEIGHT 960
 #define WIDTH 540
 #define MAX_LETTER 4
+#define SIZE_NAME_DECK 50
 #define ERRO 0
 #define SUCCESSFUL 1
+#define IMAGE_SIZE_X 240
+#define IMAGE_SIZE_Y 393
 
 // ======================================Funcoes DE FILAS===================================
 typedef struct
@@ -23,7 +26,7 @@ typedef struct
 {
 	int start;
 	int end;
-	
+	char  name[SIZE_NAME_DECK];
 	tLetter letter[MAX_LETTER];
 }tDeck;
 
@@ -85,7 +88,7 @@ void set_deck(char* nome,tDeck* deck)
 	do{
 		
 		sscanf(strtok(line,";"),"%d",&id);
-	
+
 		sscanf(strtok(NULL,";"),"%d",&attack);
 	
 		sscanf(strtok(NULL,";"),"%d",&defense);
@@ -191,7 +194,7 @@ int home(ALLEGRO_DISPLAY* home_screen){
 				
 				if(event.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
 				{
-					if(event.mouse.x >=104  && event.mouse.x <=(104 + al_get_bitmap_height(image_play_home)/2) && event.mouse.y >=386  && event.mouse.y <= (386+(al_get_bitmap_height(image_play_home)/2)))
+					if(event.mouse.x >=104  && event.mouse.x <=(104 + al_get_bitmap_width(image_play_home)/2) && event.mouse.y >=386  && event.mouse.y <= (386+(al_get_bitmap_height(image_play_home)/2)))
 					{
 						
 						play = 1;
@@ -211,7 +214,11 @@ int home(ALLEGRO_DISPLAY* home_screen){
 int deck(ALLEGRO_DISPLAY* home_screen,tDeck* deck)
 {
 	ALLEGRO_EVENT_QUEUE *queue 	= NULL;
+	ALLEGRO_BITMAP* logo 		= NULL;
 	ALLEGRO_BITMAP* deck1 		= NULL;
+	ALLEGRO_BITMAP* deck2 		= NULL;
+	ALLEGRO_BITMAP* deck3 		= NULL;
+	ALLEGRO_BITMAP* deck4 		= NULL;
 	
 	int play=0;
 	
@@ -230,8 +237,37 @@ int deck(ALLEGRO_DISPLAY* home_screen,tDeck* deck)
 		return -1;
   	}
 	
+	logo  = al_load_bitmap("logo.jpg");
+	if(!logo)
+	 {
+		fprintf(stderr,"Falha ao abrir logo !!\n");
+		al_destroy_display(home_screen);
+  		return -1;	 	
+	 }
+	
 	deck1  = al_load_bitmap("kaiba.jpg");
 	if(!deck1)
+	 {
+		fprintf(stderr,"Falha ao abrir deck !!\n");
+		al_destroy_display(home_screen);
+  		return -1;	 	
+	 }
+	deck2  = al_load_bitmap("yugi.jpg");
+	if(!deck2)
+	 {
+		fprintf(stderr,"Falha ao abrir deck !!\n");
+		al_destroy_display(home_screen);
+  		return -1;	 	
+	 }
+	deck3  = al_load_bitmap("joey.jpg");
+	if(!deck3)
+	 {
+		fprintf(stderr,"Falha ao abrir deck !!\n");
+		al_destroy_display(home_screen);
+  		return -1;	 	
+	 }
+	deck4  = al_load_bitmap("marik.jpg");
+	if(!deck4)
 	 {
 		fprintf(stderr,"Falha ao abrir deck !!\n");
 		al_destroy_display(home_screen);
@@ -252,8 +288,12 @@ int deck(ALLEGRO_DISPLAY* home_screen,tDeck* deck)
 	//coloca na fila as acoes do mouse
 	al_register_event_source(queue,al_get_mouse_event_source());
   	
-	 al_draw_bitmap(deck1,0,0,0);
-	 al_flip_display();
+  	al_draw_bitmap(logo,0,394,0);
+	al_draw_bitmap(deck1,0,0,0);
+	al_draw_bitmap(deck2,IMAGE_SIZE_X,0,0);
+	al_draw_bitmap(deck3,2*IMAGE_SIZE_X,0,0);
+	al_draw_bitmap(deck4,3*IMAGE_SIZE_X,0,0);
+	al_flip_display();
 	 
 	 
 	 while(!play)
@@ -265,11 +305,27 @@ int deck(ALLEGRO_DISPLAY* home_screen,tDeck* deck)
 				
 				if(event.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
 				{
-					if(event.mouse.x >=0  && event.mouse.x <=186 && event.mouse.y >=0  && event.mouse.y <= 186)
+					if(event.mouse.x >=0  && event.mouse.x <=IMAGE_SIZE_X && event.mouse.y >=0  && event.mouse.y <= IMAGE_SIZE_Y)
 					{
 						
 						play = 1;
+						strcpy(deck->name,"kaiba");
 						set_deck("test.csv",deck);
+					}else if(event.mouse.x >IMAGE_SIZE_X && event.mouse.x <= 2*IMAGE_SIZE_X && event.mouse.y >=0  && event.mouse.y <= IMAGE_SIZE_Y)
+					{
+						play = 1;
+						strcpy(deck->name,"yugi");
+						set_deck("yugi.csv",deck);
+					}else if(event.mouse.x >2*IMAGE_SIZE_X && event.mouse.x <= 3*IMAGE_SIZE_X && event.mouse.y >=0  && event.mouse.y <= IMAGE_SIZE_Y)
+					{
+						play = 1;
+						strcpy(deck->name,"joey");
+						set_deck("joey.csv",deck);
+					}else if(event.mouse.x >3*IMAGE_SIZE_X && event.mouse.x <= 4*IMAGE_SIZE_X && event.mouse.y >=0  && event.mouse.y <= IMAGE_SIZE_Y)
+					{
+						play = 1;
+						strcpy(deck->name,"marik");
+						set_deck("marik.csv",deck);
 					}
 					
 				}
@@ -292,13 +348,11 @@ int main(void)
 	start(&deck1);
 	
 	int play = home(home_screen);
-	int deck10 = deck(home_screen,&deck1);
+	int p1 = deck(home_screen,&deck1);
+	int p2 = deck(home_screen,&deck2);
 	
-	int i;
-	for(i=0;i<MAX_LETTER;++i)
-	{
-		fprintf(stderr,"id:%d  attack:%d  defense:%d\n",deck1.letter[i].id,deck1.letter[i].attack,deck1.letter[i].defense);
-	}
+	
+	
 	
 	
 
