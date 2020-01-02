@@ -17,7 +17,7 @@ Configurando Allegro no DevC++:
 
 2- Opcoes do Compilador
 
-3- Compilador -> Adicione a Linha de comando do Linker o seguinte: C:\allegro\lib\liballegro_monolith.dll.a
+3- Ferramentas -> Compilador -> Adicione a Linha de comando do Linker o seguinte: C:\allegro\lib\liballegro_monolith.dll.a
 
 4- Diretorios -> Bibliotecas -> Adicione o seguinte caminho: C:\allegro\lib
 
