@@ -22,3 +22,6 @@ Configurando Allegro no DevC++:
 4- Diretorios -> Bibliotecas -> Adicione o seguinte caminho: C:\allegro\lib
 
 5- Diretorios -> C Includes -> Adicione o seguinte caminho: C:\allegro\include
+
+O seu codigo so pode funcionar se tiver o arquivo 'allegro_monolith-5.2.dd'(Minha versao do allegro), caso nao possua o arquivo
+ele gera erro.
