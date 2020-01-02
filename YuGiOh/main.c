@@ -30,6 +30,12 @@ typedef struct
 	tLetter letter[MAX_LETTER];
 }tDeck;
 
+typedef struct
+{
+	int  life; 
+	char  name[SIZE_NAME_DECK];
+	tDeck deck;
+}tPlayer;
 
 void start(tDeck* deck)
 {
@@ -114,7 +120,26 @@ ALLEGRO_DISPLAY* window(ALLEGRO_DISPLAY *home_screen)
 	 {
 		fprintf(stderr,"Falha ao abrir janela 'home_screen' !!\n");
 	 }
-	 
+	
+	if(!al_init_image_addon())
+  	{
+  		fprintf(stderr,"Problema no addon !!\n");
+  	}
+  	
+  	if(!al_install_mouse())
+	{
+		fprintf(stderr,"Problema ao adicionar mouse !!\n");
+  		al_destroy_display(home_screen);
+	}
+  	
+	  //SO PODE SETAR CURSOR SE TIVER INICIALIZADO A JANELA
+  	if (!al_set_system_mouse_cursor(home_screen, ALLEGRO_SYSTEM_MOUSE_CURSOR_DEFAULT))
+  	{
+   		fprintf(stderr, "Falha ao atribuir ponteiro do mouse.\n");
+    	al_destroy_display(home_screen);
+  	} 
+  	 
+  	 
 	 return home_screen;
 }
  
@@ -126,31 +151,10 @@ int home(ALLEGRO_DISPLAY* home_screen){
     ALLEGRO_EVENT_QUEUE *queue 			= NULL;
 	int play = 0;
     
-  	if(!al_init_image_addon())
-  	{
-  		fprintf(stderr,"Problema no addon !!\n");
-  		return -1;	
-  	}
-  	
-  	
   	
   	al_set_window_title(home_screen,"Yu-Gi-Oh!");
   	
-	if(!al_install_mouse())
-	{
-		fprintf(stderr,"Problema ao adicionar mouse !!\n");
-  		al_destroy_display(home_screen);
-		return -1;	
-	}
-  	
-	  //SO PODE SETAR CURSOR SE TIVER INICIALIZADO A JANELA
-  	if (!al_set_system_mouse_cursor(home_screen, ALLEGRO_SYSTEM_MOUSE_CURSOR_DEFAULT))
-  	{
-   		fprintf(stderr, "Falha ao atribuir ponteiro do mouse.\n");
-    	al_destroy_display(home_screen);
-		return -1;
-  	} 
-  	  
+	 
   	image_home_screen  = al_load_bitmap("bg.jpg");
 	if(!image_home_screen)
 	 {
@@ -221,22 +225,9 @@ int deck(ALLEGRO_DISPLAY* home_screen,tDeck* deck)
 	ALLEGRO_BITMAP* deck4 		= NULL;
 	
 	int play=0;
-	
-	if(!al_install_mouse())
-	{
-		fprintf(stderr,"Problema ao adicionar mouse !!\n");
-  		al_destroy_display(home_screen);
-		return -1;	
-	}
   	
 	  //SO PODE SETAR CURSOR SE TIVER INICIALIZADO A JANELA
-  	if (!al_set_system_mouse_cursor(home_screen, ALLEGRO_SYSTEM_MOUSE_CURSOR_DEFAULT))
-  	{
-   		fprintf(stderr, "Falha ao atribuir ponteiro do mouse.\n");
-    	al_destroy_display(home_screen);
-		return -1;
-  	}
-	
+  	
 	logo  = al_load_bitmap("logo.jpg");
 	if(!logo)
 	 {
@@ -333,10 +324,19 @@ int deck(ALLEGRO_DISPLAY* home_screen,tDeck* deck)
 			 	al_flip_display();
 	}
 	al_destroy_bitmap(deck1);
+	al_destroy_bitmap(deck2);
+	al_destroy_bitmap(deck3);
+	al_destroy_bitmap(deck4);
+	al_destroy_bitmap(logo);
 	al_destroy_event_queue(queue);
 	return SUCCESSFUL;
 }
-
+//======================================FUNCAO GAME===================================
+void init_game(tPlayer* player,tDeck deck)
+{
+	player->life = 4000;
+	player->deck = deck;
+}
 
 // ======================================FUNCAO MAIN===================================
 int main(void)
@@ -344,15 +344,21 @@ int main(void)
 	ALLEGRO_DISPLAY *home_screen = NULL; // janela DEFAULT para tudo, o que mudamos é apenas o conteudo que será apresentado
 	home_screen = window(home_screen);
 	
-	tDeck deck1,deck2;	
+	tDeck deck1,deck2;
 	start(&deck1);
 	
 	int play = home(home_screen);
 	int p1 = deck(home_screen,&deck1);
 	int p2 = deck(home_screen,&deck2);
 	
+	tPlayer	player1,player2;
+	init_game(&player1,deck1);
+	init_game(&player2,deck2);
+
 	
 	
+	al_set_window_title(home_screen,"Yu-Gi-Oh! -> Game");
+	ALLEGRO_BITMAP* game	= NULL;
 	
 	
 
