@@ -138,8 +138,6 @@ ALLEGRO_DISPLAY* window(ALLEGRO_DISPLAY *home_screen)
    		fprintf(stderr, "Falha ao atribuir ponteiro do mouse.\n");
     	al_destroy_display(home_screen);
   	} 
-  	 
-  	 
 	 return home_screen;
 }
  
@@ -229,6 +227,7 @@ int deck(ALLEGRO_DISPLAY* home_screen,tDeck* deck)
 	  //SO PODE SETAR CURSOR SE TIVER INICIALIZADO A JANELA
   	
 	logo  = al_load_bitmap("logo.jpg");
+	
 	if(!logo)
 	 {
 		fprintf(stderr,"Falha ao abrir logo !!\n");
@@ -236,31 +235,36 @@ int deck(ALLEGRO_DISPLAY* home_screen,tDeck* deck)
   		return -1;	 	
 	 }
 	
-	deck1  = al_load_bitmap("kaiba.jpg");
+	deck1  = al_load_bitmap("kaiba.png");
 	if(!deck1)
 	 {
 		fprintf(stderr,"Falha ao abrir deck !!\n");
 		al_destroy_display(home_screen);
   		return -1;	 	
 	 }
-	deck2  = al_load_bitmap("yugi.jpg");
+	 
+	deck2  = al_load_bitmap("yugi.png");
 	if(!deck2)
 	 {
 		fprintf(stderr,"Falha ao abrir deck !!\n");
+		printf("erro 1: %d\n", deck2);
 		al_destroy_display(home_screen);
   		return -1;	 	
 	 }
-	deck3  = al_load_bitmap("joey.jpg");
+	
+	deck3  = al_load_bitmap("joey.png");
 	if(!deck3)
 	 {
 		fprintf(stderr,"Falha ao abrir deck !!\n");
+		printf("erro 2: %d\n", deck3);
 		al_destroy_display(home_screen);
   		return -1;	 	
 	 }
-	deck4  = al_load_bitmap("marik.jpg");
+	deck4  = al_load_bitmap("marik.png");
 	if(!deck4)
 	 {
 		fprintf(stderr,"Falha ao abrir deck !!\n");
+		printf("erro 3: %d\n", deck4);
 		al_destroy_display(home_screen);
   		return -1;	 	
 	 }
@@ -275,7 +279,6 @@ int deck(ALLEGRO_DISPLAY* home_screen,tDeck* deck)
   		return -1;	 	
 	}
 	
-	
 	//coloca na fila as acoes do mouse
 	al_register_event_source(queue,al_get_mouse_event_source());
   	
@@ -285,8 +288,7 @@ int deck(ALLEGRO_DISPLAY* home_screen,tDeck* deck)
 	al_draw_bitmap(deck3,2*IMAGE_SIZE_X,0,0);
 	al_draw_bitmap(deck4,3*IMAGE_SIZE_X,0,0);
 	al_flip_display();
-	 
-	 
+	  
 	 while(!play)
 	{
 			while(!al_is_event_queue_empty(queue))
@@ -298,7 +300,6 @@ int deck(ALLEGRO_DISPLAY* home_screen,tDeck* deck)
 				{
 					if(event.mouse.x >=0  && event.mouse.x <=IMAGE_SIZE_X && event.mouse.y >=0  && event.mouse.y <= IMAGE_SIZE_Y)
 					{
-						
 						play = 1;
 						strcpy(deck->name,"kaiba");
 						set_deck("test.csv",deck);
@@ -339,6 +340,7 @@ void init_game(tPlayer* player,tDeck deck)
 }
 
 // ======================================FUNCAO MAIN===================================
+
 int main(void)
 {
 	ALLEGRO_DISPLAY *home_screen = NULL; // janela DEFAULT para tudo, o que mudamos é apenas o conteudo que será apresentado
@@ -359,7 +361,4 @@ int main(void)
 	
 	al_set_window_title(home_screen,"Yu-Gi-Oh! -> Game");
 	ALLEGRO_BITMAP* game	= NULL;
-	
-	
-
 }
